@@ -50,8 +50,6 @@ type FeaturesReconciler struct {
 func (r *FeaturesReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	// TODO(user): your logic here
-
 	return ctrl.Result{}, nil
 }
 

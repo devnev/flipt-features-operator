@@ -37,22 +37,36 @@ type FeaturesTargetSpecConfigMap struct {
 
 type FeaturesTargetSpecSource struct {
 	// Namespaces in which to look for feature sources. If empty, all namespaces are searched.
+	//+kubebuilder:validation:items:MinLength=1
 	Namespaces []string `json:"namespaces,omitempty"`
 	// Label selector to filter which feature sources to consider.
-	Selector metav1.LabelSelector `json:"selector,omitempty"`
+	Selector *metav1.LabelSelector `json:"selector,omitempty"`
 	// How to handle the namespace set in the source features config.
 	//  - override: The features namespace is replaced with the kubernetes namespace of the source
 	//  - mustmatch: The features namespace must match the kubernetes namespace of the source
 	//  - require: The features namespace must be non-empty
 	//  - preserve: Leave the feature namespace as-is
-	//+kubebuilder:validation:Enum=override;mustmatch;require;preserve
-	NamespaceMapping string `json:"namespaceMapping,omitempty"`
+	NamespaceMapping FeaturesTargetSpecNamespaceMapping `json:"namespaceMapping,omitempty"`
 }
+
+//+kubebuilder:validation:Enum=override;mustmatch;require;preserve
+
+// How to handle the namespace set in the source features config.
+type FeaturesTargetSpecNamespaceMapping string
+
+const (
+	// The features namespace is replaced with the kubernetes namespace of the source
+	OverrideNamespace FeaturesTargetSpecNamespaceMapping = "override"
+	// The features namespace must match the kubernetes namespace of the source
+	MustMatchNamespace FeaturesTargetSpecNamespaceMapping = "mustmatch"
+	// The features namespace must be non-empty
+	RequireNamespace FeaturesTargetSpecNamespaceMapping = "require"
+	// Leave the feature namespace as-is
+	PreserveNamespace FeaturesTargetSpecNamespaceMapping = "preserve"
+)
 
 // FeaturesTargetStatus defines the observed state of FeaturesTarget
 type FeaturesTargetStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 }
 
 //+kubebuilder:object:root=true

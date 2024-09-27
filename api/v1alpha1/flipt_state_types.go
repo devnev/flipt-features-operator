@@ -7,7 +7,6 @@ type Document struct {
 	Namespace *Namespace `yaml:"namespace,omitempty" json:"namespace,omitempty"`
 	Flags     []*Flag    `yaml:"flags,omitempty" json:"flags,omitempty"`
 	Segments  []*Segment `yaml:"segments,omitempty" json:"segments,omitempty"`
-	Etag      string     `yaml:"-" json:"-"`
 }
 
 type Flag struct {
