@@ -32,7 +32,7 @@ type FeaturesTargetSpec struct {
 type FeaturesTargetSpecConfigMap struct {
 	// Name of the ConfigMap to update. Required.
 	//+kubebuilder:validation:MinLength=1
-	Name string `json:"name,omitempty"`
+	Name string `json:"name"`
 }
 
 type FeaturesTargetSpecSource struct {
