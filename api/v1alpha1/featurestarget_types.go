@@ -21,16 +21,27 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // FeaturesTargetSpec defines the desired state of FeaturesTarget
 type FeaturesTargetSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Sepcifies the ConfigMap resource that is updated with the compiled features configuration
+	ConfigMap *FeaturesTargetSpecConfigMap `json:"configmap,omitempty"`
 
-	// Foo is an example field of FeaturesTarget. Edit featurestarget_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Sources []FeaturesTargetSpecSource `json:"sources,omitempty"`
+}
+
+type FeaturesTargetSpecConfigMap struct {
+	// Name of the ConfigMap to update. Required.
+	//+kubebuilder:validation:MinLength=1
+	Name string `json:"name,omitempty"`
+	// Key in the ConfigMap to update. Defaults to "features.yml"
+	Key string `json:"key,omitempty"`
+}
+
+type FeaturesTargetSpecSource struct {
+	// Namespaces in which to look for feature sources. If empty, all namespaces are searched.
+	Namespaces []string `json:"namespaces,omitempty"`
+	// Label selector to filter which feature sources to consider.
+	Selector metav1.LabelSelector `json:"selector"`
 }
 
 // FeaturesTargetStatus defines the observed state of FeaturesTarget
