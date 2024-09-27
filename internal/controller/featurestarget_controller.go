@@ -156,14 +156,14 @@ func (r *FeaturesTargetReconciler) addFeatures(cm *corev1.ConfigMap, features *f
 	case fliptv1alpha1.MustMatchNamespace:
 		if fsf.Namespace == nil {
 			namespaceValid = false
-		} else if fsf.Namespace.Name != features.GetNamespace() {
+		} else if fsf.Namespace.Key != features.GetNamespace() {
 			namespaceValid = false
 		}
 	case fliptv1alpha1.OverrideNamespace:
 		if fsf.Namespace == nil {
 			fsf.Namespace = &fliptv1alpha1.Namespace{}
 		}
-		fsf.Namespace.Name = features.GetNamespace()
+		fsf.Namespace.Key = features.GetNamespace()
 	case fliptv1alpha1.RequireNamespace:
 		if fsf.Namespace == nil || fsf.Namespace.Name == "" {
 			namespaceValid = false
