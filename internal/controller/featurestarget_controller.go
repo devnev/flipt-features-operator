@@ -61,10 +61,13 @@ type FeaturesTargetReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
 func (r *FeaturesTargetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	l := log.FromContext(ctx)
+
 	var featuresTarget fliptv1alpha1.FeaturesTarget
 	if err := r.Get(ctx, req.NamespacedName, &featuresTarget); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
+	l.V(1).Info("Reconciling FeaturesTarget", "object", featuresTarget)
 
 	configmap := &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
@@ -87,20 +90,24 @@ func (r *FeaturesTargetReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 
 		if len(source.Namespaces) > 0 {
 			for _, ns := range source.Namespaces {
+				l.V(1).Info("Listing namespace features", "namespace", ns, "selector", listOpts.LabelSelector)
 				listOpts.Namespace = ns
 				var featuresList fliptv1alpha1.FeaturesList
 				if err := r.List(ctx, &featuresList, &listOpts); err != nil {
 					return ctrl.Result{}, err
 				}
+				l.V(1).Info("Listed namespace features", "namespace", ns, "count", len(featuresList.Items))
 				for _, features := range featuresList.Items {
 					r.addFeatures(configmap, &features, source.NamespaceMapping)
 				}
 			}
 		} else {
+			l.V(1).Info("Listing cluster features", "selector", listOpts.LabelSelector)
 			var featuresList fliptv1alpha1.FeaturesList
 			if err := r.List(ctx, &featuresList, &listOpts); err != nil {
 				return ctrl.Result{}, err
 			}
+			l.V(1).Info("Listed cluster features", "count", len(featuresList.Items))
 			for _, features := range featuresList.Items {
 				r.addFeatures(configmap, &features, source.NamespaceMapping)
 			}
@@ -112,10 +119,18 @@ func (r *FeaturesTargetReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	if err != nil && !errors.IsNotFound(err) {
 		return ctrl.Result{}, err
 	} else if errors.IsNotFound(err) {
-		r.Create(ctx, configmap)
+		l.V(1).Info("Creating new ConfigMap", "namespace", configmap.Namespace, "name", configmap.Name, "count", len(configmap.Data))
+		err = r.Create(ctx, configmap)
+		return ctrl.Result{}, err
 	} else {
+		var (
+			deleted  int
+			skipped  int
+			upserted int
+		)
 		for key := range existing.Data {
 			if _, exists := configmap.Data[key]; !exists {
+				deleted++
 				delete(existing.Data, key)
 			}
 		}
@@ -125,10 +140,13 @@ func (r *FeaturesTargetReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		for key, value := range configmap.Data {
 			// New value invalid, don't update
 			if value == "" {
+				skipped++
 				continue
 			}
 			existing.Data[key] = value
+			upserted++
 		}
+		l.V(1).Info("Update ConfigMap", "namespace", configmap.Namespace, "name", configmap.Name, "deleted", deleted, "skipped", skipped, "upserted", upserted)
 	}
 
 	return ctrl.Result{}, nil
