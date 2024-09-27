@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- flipt_v1alpha1_featurestarget.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples
