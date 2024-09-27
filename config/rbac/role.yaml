@@ -7,6 +7,32 @@ rules:
 - apiGroups:
   - flipt.nev.dev
   resources:
+  - features
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - flipt.nev.dev
+  resources:
+  - features/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - flipt.nev.dev
+  resources:
+  - features/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - flipt.nev.dev
+  resources:
   - featurestargets
   verbs:
   - create
