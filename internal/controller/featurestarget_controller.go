@@ -144,7 +144,7 @@ func (r *FeaturesTargetReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 func (r *FeaturesTargetReconciler) addFeatures(cm *corev1.ConfigMap, features *fliptv1alpha1.Features, NamespaceMapping fliptv1alpha1.FeaturesTargetSpecNamespaceMapping) {
-	name := fmt.Sprintf("%s/%s/features.yml", features.Namespace, features.Name)
+	name := fmt.Sprintf("%s_%s.yml", features.Namespace, features.Name)
 	// Prevent deletion of the old value in case of error
 	cm.Data[name] = ""
 
