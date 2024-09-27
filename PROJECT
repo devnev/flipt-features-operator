@@ -20,4 +20,13 @@ resources:
   kind: FeaturesTarget
   path: github.com/devnev/flipt-features-operator/api/v1alpha1
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: nev.dev
+  group: flipt
+  kind: Features
+  path: github.com/devnev/flipt-features-operator/api/v1alpha1
+  version: v1alpha1
 version: "3"
