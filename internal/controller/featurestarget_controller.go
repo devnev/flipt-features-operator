@@ -66,7 +66,12 @@ func (r *FeaturesTargetReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	configmap := &corev1.ConfigMap{}
+	configmap := &corev1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      featuresTarget.Spec.ConfigMap.Name,
+			Namespace: featuresTarget.Namespace,
+		},
+	}
 	if err := controllerutil.SetControllerReference(&featuresTarget, configmap, r.Scheme); err != nil {
 		return ctrl.Result{}, err
 	}
