@@ -43,9 +43,6 @@ spec:
                 description: Sepcifies the ConfigMap resource that is updated with
                   the compiled features configuration
                 properties:
-                  key:
-                    description: Key in the ConfigMap to update. Defaults to "features.yml"
-                    type: string
                   name:
                     description: Name of the ConfigMap to update. Required.
                     minLength: 1
@@ -54,6 +51,19 @@ spec:
               sources:
                 items:
                   properties:
+                    namespaceMapping:
+                      description: |-
+                        How to handle the namespace set in the source features config.
+                         - override: The features namespace is replaced with the kubernetes namespace of the source
+                         - mustmatch: The features namespace must match the kubernetes namespace of the source
+                         - require: The features namespace must be non-empty
+                         - preserve: Leave the feature namespace as-is
+                      enum:
+                      - override
+                      - mustmatch
+                      - require
+                      - preserve
+                      type: string
                     namespaces:
                       description: Namespaces in which to look for feature sources.
                         If empty, all namespaces are searched.
@@ -105,8 +115,6 @@ spec:
                           type: object
                       type: object
                       x-kubernetes-map-type: atomic
-                  required:
-                  - selector
                   type: object
                 type: array
             type: object

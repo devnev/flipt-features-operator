@@ -33,15 +33,20 @@ type FeaturesTargetSpecConfigMap struct {
 	// Name of the ConfigMap to update. Required.
 	//+kubebuilder:validation:MinLength=1
 	Name string `json:"name,omitempty"`
-	// Key in the ConfigMap to update. Defaults to "features.yml"
-	Key string `json:"key,omitempty"`
 }
 
 type FeaturesTargetSpecSource struct {
 	// Namespaces in which to look for feature sources. If empty, all namespaces are searched.
 	Namespaces []string `json:"namespaces,omitempty"`
 	// Label selector to filter which feature sources to consider.
-	Selector metav1.LabelSelector `json:"selector"`
+	Selector metav1.LabelSelector `json:"selector,omitempty"`
+	// How to handle the namespace set in the source features config.
+	//  - override: The features namespace is replaced with the kubernetes namespace of the source
+	//  - mustmatch: The features namespace must match the kubernetes namespace of the source
+	//  - require: The features namespace must be non-empty
+	//  - preserve: Leave the feature namespace as-is
+	//+kubebuilder:validation:Enum=override;mustmatch;require;preserve
+	NamespaceMapping string `json:"namespaceMapping,omitempty"`
 }
 
 // FeaturesTargetStatus defines the observed state of FeaturesTarget
