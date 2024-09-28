@@ -24,7 +24,7 @@ import (
 // FeaturesTargetSpec defines the desired state of FeaturesTarget
 type FeaturesTargetSpec struct {
 	// Sepcifies the ConfigMap resource that is updated with the compiled features configuration
-	ConfigMap *FeaturesTargetSpecConfigMap `json:"configmap,omitempty"`
+	ConfigMap *FeaturesTargetSpecConfigMap `json:"configMap,omitempty"`
 
 	Sources []FeaturesTargetSpecSource `json:"sources,omitempty"`
 }

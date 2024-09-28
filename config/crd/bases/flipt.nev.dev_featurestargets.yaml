@@ -39,7 +39,7 @@ spec:
           spec:
             description: FeaturesTargetSpec defines the desired state of FeaturesTarget
             properties:
-              configmap:
+              configMap:
                 description: Sepcifies the ConfigMap resource that is updated with
                   the compiled features configuration
                 properties:
