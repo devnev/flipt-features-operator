@@ -1,0 +1,16 @@
+apiVersion: flipt.nev.dev/v1alpha1
+kind: Features
+metadata:
+  labels:
+    app.kubernetes.io/name: flipt-features-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: features-appns
+  namespace: e2e-test-app
+spec:
+  features:
+    namespace:
+      key: "my-app"
+      name: "My App"
+    flags:
+      - key: feature-flag
+        enabled: true
