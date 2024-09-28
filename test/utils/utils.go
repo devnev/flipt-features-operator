@@ -48,23 +48,19 @@ func InstallPrometheusOperator() error {
 }
 
 // Run executes the provided command within this context
-func Run(cmd *exec.Cmd) ([]byte, error) {
+func Run(cmd *exec.Cmd) (string, error) {
 	dir, _ := GetProjectDir()
 	cmd.Dir = dir
-
-	if err := os.Chdir(cmd.Dir); err != nil {
-		fmt.Fprintf(GinkgoWriter, "chdir dir: %s\n", err)
-	}
 
 	cmd.Env = append(os.Environ(), "GO111MODULE=on")
 	command := strings.Join(cmd.Args, " ")
 	fmt.Fprintf(GinkgoWriter, "running: %s\n", command)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return output, fmt.Errorf("%s failed with error: (%v) %s", command, err, string(output))
+		return string(output), fmt.Errorf("%s failed with error: (%w) %s", command, err, string(output))
 	}
 
-	return output, nil
+	return string(output), nil
 }
 
 // UninstallPrometheusOperator uninstalls the prometheus
