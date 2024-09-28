@@ -699,7 +699,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: devnev/flipt-features-operator:v0.0.1
+        image: devnev/flipt-features-operator:v0.0.2
         livenessProbe:
           httpGet:
             path: /healthz
