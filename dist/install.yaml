@@ -483,6 +483,18 @@ metadata:
   name: flipt-features-operator-manager-role
 rules:
 - apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - flipt.nev.dev
   resources:
   - features

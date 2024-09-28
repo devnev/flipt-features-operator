@@ -50,6 +50,7 @@ type FeaturesTargetReconciler struct {
 //+kubebuilder:rbac:groups=flipt.nev.dev,resources=featurestargets,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=flipt.nev.dev,resources=featurestargets/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=flipt.nev.dev,resources=featurestargets/finalizers,verbs=update
+//+kubebuilder:rbac:groups="",resources=configmaps,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
